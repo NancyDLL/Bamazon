@@ -17,9 +17,16 @@ var connection = mysql.createConnection({
 
 // connect to the mysql server and sql database
 connection.connect(function(err) {
-	//if (err) throw err;
-	console.log(connection);
-  
-  // run the start function after the connection is made to prompt the user
-  //listProducts();
+	if (err) throw err;
+	//console.log(connection);
+ 	// run the listProducts function after the connection is made to prompt the user
+	listProducts();
 });
+
+//Function to list all Products
+function listProducts() {
+	connection.query("SELECT * FROM products", function(err, res) {
+		if (err) throw err;
+		console.log(res);
+	});
+}
