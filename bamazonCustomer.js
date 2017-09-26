@@ -67,3 +67,30 @@ function customerSelection() {
         purchase(item_idSelect, quantitySelect);
     });
 }
+
+//run the purchase function to complete the cycle
+function purchase(item_idSelect, quantitySelect) {
+
+    connection.query('SELECT * FROM products WHERE item_id = ' + item_id, function (err, res) {
+        if (err) throw err;
+
+        if (quantitySelect <= res[0].stock_quantity) {
+
+            let totalCost = res[0].price * quantitySelect;
+
+            console.log("Thank you for purchasing " + quantitySelect + " " + res[0].product_name + " for a total of " + totalCost);
+
+            var newInventory = res[0].stock_quantity - parseInt(quantitySelect);
+            var sql = "UPDATE products SET stock_quantity = '" + newInventory + "' WHERE item_id = '" + item_id + "'";
+            console.log(sql);
+            connection.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log(result.affectedRows + " record(s) updated");
+                process.exit()
+            });
+        } else {
+            console.log("Insufficient quantity!");
+            process.exit()
+        };
+    });
+};
