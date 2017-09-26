@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   // Username
   user: "root",
   // Password
-  password: "#fm2;6dy3R%]JU7d,x9t",
+  password: "",
   database: "bamazon_db"
 });
 
@@ -94,9 +94,12 @@ function customerQuantSelect(product) {
       // If there isn't enough of the chosen product and quantity, let the user know and re-run listProducts
       if (quantity > product.stock_quantity) {
       	console.log(" ");
+      	console.log(" ");
       	console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         console.log("Insufficient quantity in stock, please make another selection.");
         console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        console.log(" ");
+        console.log(" ");
         listProducts();
       }
       else {
@@ -113,7 +116,10 @@ function makePurchase(product, quantity) {
     [quantity, product.item_id],
     function(err, res) {
       // Let the user know the purchase was successful, re-run listProducts
-      console.log("Thank you for your purchase of " + quantity + " " + product.product_name + "'s!");
+		console.log("Thank you for your purchase of " + quantity + " " + product.product_name + "'s!");
+		console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+		console.log(" ");
+		console.log(" "); 
       process.exit();
     }
   );
