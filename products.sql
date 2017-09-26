@@ -22,7 +22,7 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Arrow", "Elf", 5, 1000);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ("Sheild", "Warrior", 1000, 8);
+VALUES ("Shield", "Warrior", 1000, 8);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Robe", "Mage", 1000, 8);
