@@ -1,10 +1,10 @@
 //The inquirer module will be required to be able to ask questions.
 var inquirer = require("inquirer");
 
-//mySQL will be required to be able to update the db of products.
+//mySQL module will be required to be able to update the db of products.
 var mysql = require("mysql");
 
-//use this to display all the products in the db
+//This module for the table method will be reqired so that the products from the db are displayed in table format
 require("console.table");
 
 // create the connection information for the sql database
@@ -38,33 +38,28 @@ function listProducts() {
 		console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 		console.log(" ");
 	//run the function for customer selection, with all the products.
-	customerSelection();
+	customerSelection(res);
 	});
 }
 
 // Prompt customer for what they would like to purchase
-function customerSelection() {
+function customerSelection(inventory) {
 	inquirer.prompt([
-      {
+	{
         type: "input",
         name: "item_id",
         message: "Enter the item ID of the product you would like to buy from the list above.",
-      	validate: function (value) {
-			if (isNaN(value) === false) {
-				return true;
-			}
-			return false;
-		}
 	},
 	{
 		type: "input",
 		name: "quantity",
 		message: "Enter the qantity of the item you would like to buy."
     }
-    ]).then(function (select) {
-    	var item_idSelect = select.item_id;
-        var quantitySelect = select.quantity;
+    ]).then(function (val) {
+    	var item_idSelect = parseInt(val.item_id);
+        var quantitySelect = parseInt(val.quantity);
         purchase(item_idSelect, quantitySelect);
+        //console.log(item_idSelect, quantitySelect);
     });
 }
 
