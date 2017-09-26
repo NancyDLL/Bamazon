@@ -38,32 +38,32 @@ function listProducts() {
 		console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 		console.log(" ");
 	//run the function for customer selection, with all the products.
-	customerProdSelect(res);
+	customerSelection();
 	});
 }
 
-// List products for the customer to select from
-function customerProdSelect(inventory) {
-  // Prompts user for what they would like to purchase
-  inquirer.prompt([
+// Prompt customer for what they would like to purchase
+function customerSelection() {
+	inquirer.prompt([
       {
-        type: "list",
-        name: "productList",
-        message: "Select from the list which product that you would like to buy.",
-        choices: [res]
-      }
-    ]).then(function(val) {
-      var product = checkInventory(choiceId, inventory);
-
-      //Prompt the customer for a desired quantity
-      if (product) {
-        // Pass the chosen product to promptCustomerForQuantity
-        promptCustomerForQuantity(product);
-      }
-      else {
-        // Otherwise let them know the item is not in the inventory, re-run loadProducts
-        console.log("\nThat item is not in the inventory.");
-        loadProducts();
-      }
+        type: "input",
+        name: "item_id",
+        message: "Enter the item ID of the product you would like to buy from the list above.",
+      	validate: function (value) {
+			if (isNaN(value) === false) {
+				return true;
+			}
+			return false;
+		}
+	},
+	{
+		type: "input",
+		name: "quantity",
+		message: "Enter the qantity of the item you would like to buy."
+    }
+    ]).then(function (select) {
+    	var item_idSelect = select.item_id;
+        var quantitySelect = select.quantity;
+        purchase(item_idSelect, quantitySelect);
     });
 }
