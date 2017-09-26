@@ -37,55 +37,97 @@ function listProducts() {
 		console.table(res);
 		console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 		console.log(" ");
-	//run the function for customer selection, with all the products.
-	customerSelection(res);
+	//run the function for customer product selection, with all the products from the db.
+	customerProdSelect(res);
 	});
 }
 
-// Prompt customer for what they would like to purchase
-function customerSelection(inventory) {
-	inquirer.prompt([
-	{
+// Function for customer product selection
+function customerProdSelect(inventory) {
+  inquirer
+    .prompt([
+      {
         type: "input",
-        name: "item_id",
-        message: "Enter the item ID of the product you would like to buy from the list above.",
-	},
-	{
-		type: "input",
-		name: "quantity",
-		message: "Enter the qantity of the item you would like to buy."
-    }
-    ]).then(function (val) {
-    	var item_idSelect = parseInt(val.item_id);
-        var quantitySelect = parseInt(val.quantity);
-        purchase(item_idSelect, quantitySelect);
-        //console.log(item_idSelect, quantitySelect);
+        name: "choice",
+        message: "Enter the Item ID of the item you would like to purchase.",
+        validate: function(val) {
+          return !isNaN(val);
+        }
+      }
+    ])
+    .then(function(val) {
+      var choiceId = parseInt(val.choice);
+      var product = checkInventory(choiceId, inventory);
+      // If there is a product with the id the user chose, prompt the customer for a desired quantity
+      if (product) {
+        // Pass the chosen product to promptCustomerForQuantity
+        customerQuantSelect(product);
+      }
+      else {
+        // Otherwise let them know the item is not in the inventory, re-run listProducts
+        console.log(" ");
+        console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        console.log("That item is not in the inventory, please make another selection.");
+        console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        listProducts();
+      }
     });
 }
 
-//run the purchase function to complete the cycle
-function purchase(item_idSelect, quantitySelect) {
+// Function for customer quantity selection
+function customerQuantSelect(product) {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "quantity",
+        message: "How many would you like?",
+        validate: function(val) {
+          return val > 0;
+        }
+      }
+    ])
+    .then(function(val) {
+      // Check if the user wants to quit the program
+      var quantity = parseInt(val.quantity);
 
-    connection.query('SELECT * FROM products WHERE item_id = ' + item_id, function (err, res) {
-        if (err) throw err;
-
-        if (quantitySelect <= res[0].stock_quantity) {
-
-            let totalCost = res[0].price * quantitySelect;
-
-            console.log("Thank you for purchasing " + quantitySelect + " " + res[0].product_name + " for a total of " + totalCost);
-
-            var newInventory = res[0].stock_quantity - parseInt(quantitySelect);
-            var sql = "UPDATE products SET stock_quantity = '" + newInventory + "' WHERE item_id = '" + item_id + "'";
-            console.log(sql);
-            connection.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result.affectedRows + " record(s) updated");
-                process.exit()
-            });
-        } else {
-            console.log("Insufficient quantity!");
-            process.exit()
-        };
+      // If there isn't enough of the chosen product and quantity, let the user know and re-run listProducts
+      if (quantity > product.stock_quantity) {
+      	console.log(" ");
+      	console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        console.log("Insufficient quantity in stock, please make another selection.");
+        console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        listProducts();
+      }
+      else {
+        // Otherwise run makePurchase, give it the product information and desired quantity to purchase
+        makePurchase(product, quantity);
+      }
     });
-};
+}
+
+// Purchase the desired quanity of the desired item
+function makePurchase(product, quantity) {
+  connection.query(
+    "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
+    [quantity, product.item_id],
+    function(err, res) {
+      // Let the user know the purchase was successful, re-run listProducts
+      console.log("Thank you for your purchase of " + quantity + " " + product.product_name + "'s!");
+      process.exit();
+    }
+  );
+}
+
+// Check to see if the product the user chose exists in the inventory
+function checkInventory(choiceId, inventory) {
+  for (var i = 0; i < inventory.length; i++) {
+    if (inventory[i].item_id === choiceId) {
+      // If a matching product is found, return the product
+      return inventory[i];
+    }
+  }
+  // Otherwise return null
+  return null;
+}
+
