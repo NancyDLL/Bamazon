@@ -21,5 +21,13 @@ In this assignment students were tasked to create an app that:
 1. Install console.table -> https://www.npmjs.com/package/console.table
 
 ### Run the App
-1. At the command line enter -> node bamazonCustomer.js
-1. From the 
+At the command line enter -> node bamazonCustomer.js
+**The list of products is presented to the user with a prompt to select a product.**
+
+**The prompt to select a qantity is presented.**
+
+**The prompt to select a qantity is presented.**
+
+**Confirmation of the prchase is output.**
+
+### Incorrect Input
