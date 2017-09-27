@@ -7,13 +7,21 @@ In this assignment students were tasked to create an app that:
 1. Enables users to select a product and a quantity.
 1. Updates the SQL database with the change in the inventory.
 
+<<<<<<< HEAD
 ## Review of the App
+=======
+## How to review this App
+>>>>>>> 123c92fc024e88ea95af7c5f5e4960f3127611ba
 
 ### Set up the files and database on your local machine
 1. Git clone this repository -> https://github.com/NancyDLL/Bamazon
 1. Use the file "schema.sql" to create the table.
 1. Use the file "products.sql" to poplate the database.
+<<<<<<< HEAD
 1. Modify the "bamazonCustomer.js file line 17 with the password of your localhost
+=======
+1. Modify the "bamazonCustomer.js file line 17 with the password of your localhost.
+>>>>>>> 123c92fc024e88ea95af7c5f5e4960f3127611ba
 
 ### Set up the node modules needed to run the JavaScript file.
 1. Install inquirer -> https://www.npmjs.com/package/inquirer
