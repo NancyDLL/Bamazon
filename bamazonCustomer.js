@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   // Username
   user: "root",
   // Password
-  password: "",
+  password: "#fm2;6dy3R%]JU7d,x9t",
   database: "bamazon_db"
 });
 
@@ -66,9 +66,12 @@ function customerProdSelect(inventory) {
       else {
         // Otherwise let them know the item is not in the inventory, re-run listProducts
         console.log(" ");
+        console.log(" ");
         console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         console.log("That item is not in the inventory, please make another selection.");
         console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        console.log(" ");
+        console.log(" ");
         listProducts();
       }
     });
@@ -116,6 +119,9 @@ function makePurchase(product, quantity) {
     [quantity, product.item_id],
     function(err, res) {
       // Let the user know the purchase was successful, re-run listProducts
+		console.log(" ");
+		console.log(" ");
+		console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 		console.log("Thank you for your purchase of " + quantity + " " + product.product_name + "'s!");
 		console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 		console.log(" ");
