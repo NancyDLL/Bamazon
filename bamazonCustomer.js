@@ -58,13 +58,12 @@ function customerProdSelect(inventory) {
     .then(function(val) {
       var choiceId = parseInt(val.choice);
       var product = checkInventory(choiceId, inventory);
-      // If there is a product with the id the user chose, prompt the customer for a desired quantity
       if (product) {
-        // Pass the chosen product to promptCustomerForQuantity
+        // run the function for quantity slection after the product is selected.
         customerQuantSelect(product);
       }
       else {
-        // Otherwise let them know the item is not in the inventory, re-run listProducts
+        // if the product id does not match the db notify user to make another selection.
         console.log(" ");
         console.log(" ");
         console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
@@ -91,10 +90,9 @@ function customerQuantSelect(product) {
       }
     ])
     .then(function(val) {
-      // Check if the user wants to quit the program
       var quantity = parseInt(val.quantity);
 
-      // If there isn't enough of the chosen product and quantity, let the user know and re-run listProducts
+      // if the quantity does not match the amount available notify the user to make another selection.
       if (quantity > product.stock_quantity) {
       	console.log(" ");
       	console.log(" ");
@@ -106,19 +104,18 @@ function customerQuantSelect(product) {
         listProducts();
       }
       else {
-        // Otherwise run makePurchase, give it the product information and desired quantity to purchase
+        // run the function to make the purchase.
         makePurchase(product, quantity);
       }
     });
 }
 
-// Purchase the desired quanity of the desired item
+// Function to finalize the purchase of the user selection
 function makePurchase(product, quantity) {
   connection.query(
     "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?",
     [quantity, product.item_id],
     function(err, res) {
-      // Let the user know the purchase was successful, re-run listProducts
 		console.log(" ");
 		console.log(" ");
 		console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
@@ -126,20 +123,17 @@ function makePurchase(product, quantity) {
 		console.log("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 		console.log(" ");
 		console.log(" "); 
-      process.exit();
+      	process.exit();
     }
   );
 }
 
-// Check to see if the product the user chose exists in the inventory
+// Function to check the inventory
 function checkInventory(choiceId, inventory) {
   for (var i = 0; i < inventory.length; i++) {
     if (inventory[i].item_id === choiceId) {
-      // If a matching product is found, return the product
       return inventory[i];
     }
   }
-  // Otherwise return null
   return null;
 }
-
